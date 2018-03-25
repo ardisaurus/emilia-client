@@ -16,9 +16,9 @@
   	?>
 	<?php echo form_open('admin/device/process_add');?>
 		<label for="dvc_id">Id Device</label>
-		<input type="text" name="dvc_id"/>
+		<input type="text" name="dvc_id" readonly="true" value="<?php echo $dvc_id; ?>"/>
 		<label for="dvc_password">Password</label>
-		<input type="password" name="dvc_password"/>
+		<input type="password" autofocus="true" name="dvc_password"/>
 		<label for="dvc_password2">Konfirmasi Password</label>
 		<input type="password" name="dvc_password2"/>
 		<input type="submit" name="add" value="Add"/>

@@ -10,6 +10,9 @@
 				Menu :
 			</td>
 			<td>
+				<a href="<?php echo site_url('member/device/');?>">Device</a>
+			</td>
+			<td>
 				<a href="<?php echo site_url('member/setting/');?>">Setting</a>
 			</td>
 			<td>
@@ -17,26 +20,6 @@
 			</td>
 		</tr>
 	</table>
-	<h3>Device List</h3>
-	<a href="<?php echo site_url('member/welcome/add_device');?>">Add device</a>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>Id Device</th>
-				<th>Device Name</th>
-				<th>Status</th>
-				<th colspan="2"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>SL-191928</td>
-				<td>Front Door</td>
-				<td>Closed</td>
-				<td><a href="<?php echo site_url('member/welcome/edit_device');?>">Edit device</a></td>
-				<td><a href="<?php echo site_url('member/welcome/add_device');?>">Open/Close</a></td>
-			</tr>
-		</tbody>
-	</table>
+	<h3>Welcome Member</h3>	
 </body>
 </html>

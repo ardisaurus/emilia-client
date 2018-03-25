@@ -12,11 +12,11 @@ Class Signup extends CI_Controller{
         }
     }
 
-    function index(){
+    function index() {
         $this->load->view('v_signup');
     }
 
-    function proses(){                
+    function proses() {                
         $this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password2]|min_length[8]|max_length[12]');
         $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'trim|required');

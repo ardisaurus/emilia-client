@@ -12,11 +12,11 @@ Class Login extends CI_Controller{
         }
     }
 
-    function index(){
+    function index() {
         $this->load->view('v_login');
     }
     
-    function proses(){        
+    function proses() {        
             $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
             $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]|max_length[12]');
             if ($this->form_validation->run() == FALSE)
@@ -28,10 +28,8 @@ Class Login extends CI_Controller{
                     'password'  =>  md5($this->input->post('password')),
                     'action'       =>  'auth');
                 $respond = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
-                if(isset($respond[0]->status))
-                {
-                    if($respond[0]->status=="success")
-                    {
+                if(isset($respond[0]->status)){
+                    if($respond[0]->status=="success"){
                         $params = array('email'=>  $this->input->post('email'));
                         $data = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
                         $active=$data[0]->active;
@@ -57,7 +55,7 @@ Class Login extends CI_Controller{
             }                
     }
     
-    function forgotpassword(){ 
+    function forgotpassword() { 
         $this->load->view('v_forgot_password');
     }
 }

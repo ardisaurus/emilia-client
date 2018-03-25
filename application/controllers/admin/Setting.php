@@ -13,17 +13,15 @@ class Setting extends CI_Controller {
         }
     }
 
-	public function index()
-	{
+	public function index() {
         $params = array('email'=>  $this->session->userdata('email'));
         $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params));
         $this->load->view('admin/v_setting', $data);
 	}
 
-    function edit_email(){
+    function edit_email() {
         $this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
-        if ($this->form_validation->run() == FALSE)
-        {
+        if ($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('peringatan', validation_errors());
             redirect('admin/setting');                     
         }else{
@@ -39,8 +37,7 @@ class Setting extends CI_Controller {
                                 'part' => "email");
                     $update =  $this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10));
                     $this->session->set_userdata('email', $this->input->post('email'));
-                    if($update)
-                    {
+                    if($update){
                         $this->session->set_flashdata('hasil','Update Data Berhasil');
                     }else{
                         $this->session->set_flashdata('hasil','Update Data Gagal');
@@ -50,10 +47,9 @@ class Setting extends CI_Controller {
         }        
     }
 
-    function edit_name(){
+    function edit_name() {
         $this->form_validation->set_rules('name', 'Name', 'trim|required|min_length[4]|max_length[50]');
-        if ($this->form_validation->run() == FALSE)
-        {
+        if ($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('peringatan', validation_errors());
             redirect('admin/setting');                      
         }else{
@@ -71,12 +67,11 @@ class Setting extends CI_Controller {
         }        
     }
 
-    function edit_password(){
+    function edit_password() {
         $this->form_validation->set_rules('old_password', 'Password', 'trim|required|min_length[8]|max_length[12]');
         $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password2]|min_length[8]|max_length[12]');
         $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'trim|required');
-        if ($this->form_validation->run() == FALSE)
-        {
+        if ($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('peringatan', validation_errors());
             redirect('admin/setting');                      
         }else{
@@ -93,8 +88,7 @@ class Setting extends CI_Controller {
                                 'action' => "update", 
                                 'part' => "password");
                     $update =  $this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10));
-                    if($update)
-                    {
+                    if($update){
                         $this->session->set_flashdata('hasil','Update Data Berhasil');
                     }else{
                         $this->session->set_flashdata('hasil','Update Data Gagal');
@@ -109,7 +103,7 @@ class Setting extends CI_Controller {
         }        
     }
 
-    function edit_dob(){        
+    function edit_dob() {        
         $dob=$this->input->post('dob_year')."-".$this->input->post('dob_month')."-".$this->input->post('dob_day');
         $data = array(  'email' => $this->session->userdata('email'), 
                         'dob' => $dob,
@@ -124,10 +118,9 @@ class Setting extends CI_Controller {
         redirect('admin/setting');    
     }
 
-    function delete(){
+    function delete() {
         $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[8]|max_length[12]');
-        if ($this->form_validation->run() == FALSE)
-        {
+        if ($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('peringatan', validation_errors());
             redirect('admin/setting');                      
         }else{
@@ -149,8 +142,7 @@ class Setting extends CI_Controller {
                         $data = array('email' => $this->session->userdata('email'),
                                       'action' => "delete");
                         $delete =  $this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10));
-                        if($delete)
-                        {
+                        if($delete){
                             $this->session->set_flashdata('hasil','Hapus Data Berhasil');
                             redirect("admin/setting/logout");
                         }else{
@@ -171,9 +163,10 @@ class Setting extends CI_Controller {
         }        
     }
 
-    function logout(){
+    function logout() {
         $this->session->unset_userdata('email');        
         $this->session->unset_userdata('level');
         redirect('login');
     }
 }
+?>

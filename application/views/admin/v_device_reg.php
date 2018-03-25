@@ -23,22 +23,22 @@
 			</td>
 		</tr>
 	</table>
-	<h3>Device List</h3>
-	<a href="<?php echo site_url('admin/device/add_device');?>">Add device</a>
+	<h3>Device List Registered</h3>
+	<a href="<?php echo site_url('admin/device');?>">Device List Unegistered</a>
 	<table border="1">
 		<thead>
 			<tr>
 				<th>Id Device</th>
-				<th>Ownership Status</th>
-				<th></th>
+				<th>Owner</th>
+				<th>Email</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php foreach ($device as $devicedata) {  ?>
 			<tr>
 				<td><?php echo $devicedata->dvc_id; ?></td>
-				<td><?php echo $devicedata->dvc_status; ?></td>
-				<td><a href="<?php echo site_url('admin/device/detail_device');?>">Detail</a></td>
+				<td><?php echo $devicedata->name; ?></td>
+				<td><?php echo $devicedata->email; ?></td>
 			</tr>
 			<?php } ?>
 		</tbody>

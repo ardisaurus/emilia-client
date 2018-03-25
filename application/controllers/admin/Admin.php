@@ -13,14 +13,12 @@ class Admin extends CI_Controller {
         }
     }
 
-    public function index()
-    {
+    public function index(){
         $data['user'] = json_decode($this->curl->simple_get($this->API.'/user'));
         $this->load->view('admin/v_admin_list', $data);
     }
 
-    public function add_admin()
-    {
+    public function add_admin(){
         $this->load->view('admin/v_add_admin');
     }
 
@@ -58,3 +56,4 @@ class Admin extends CI_Controller {
         } 
     }
 }
+?>

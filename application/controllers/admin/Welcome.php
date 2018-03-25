@@ -13,8 +13,8 @@ class Welcome extends CI_Controller {
         }
     }
 
-	public function index()
-	{
+	public function index() {
 		$this->load->view('admin/v_welcome');
 	}
 }
+?>
