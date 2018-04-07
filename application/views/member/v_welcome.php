@@ -10,7 +10,10 @@
 				Menu :
 			</td>
 			<td>
-				<a href="<?php echo site_url('member/device/');?>">Device</a>
+				<a href="<?php echo site_url('member/device/');?>">Primary Access</a>
+			</td>
+			<td>
+				<a href="<?php echo site_url('member/device/secondary');?>">Secondary Access</a>
 			</td>
 			<td>
 				<a href="<?php echo site_url('member/setting/');?>">Setting</a>

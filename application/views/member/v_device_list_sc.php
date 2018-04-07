@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Device list :  Primary Access</title>
+	<title>Device list: Secondary Access</title>
 </head>
 <body>
 	<table border="1">
@@ -23,7 +23,7 @@
 			</td>
 		</tr>
 	</table>
-	<h3>Device List : Primary Access</h3>
+	<h3>Device List</h3>
 	<a href="<?php echo site_url('member/device/add_device');?>">Add device</a>
 	<table border="1">
 		<thead>
@@ -31,7 +31,7 @@
 				<th>Id Device</th>
 				<th>Device Name</th>
 				<th>Status</th>
-				<th colspan="3"></th>
+				<th colspan="2"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -45,7 +45,6 @@
 					<td bgcolor="red">Closed</td>
 				<?php } ?>
 				<td><a href="<?php echo site_url('member/device/edit_device/'.$devicedata->dvc_id);?>">Edit device</a></td>
-				<td><a href="<?php echo site_url('member/device/history/'.$devicedata->dvc_id);?>">History</a></td>
 				<td>
 					<?php if ($devicedata->dvc_status!=1) { ?>
 						<a href="<?php echo site_url('member/device/open_device/'.$devicedata->dvc_id);?>">Open</a>

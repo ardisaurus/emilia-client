@@ -19,6 +19,12 @@ class Device extends CI_Controller {
         $this->load->view('member/v_device_list', $data);
     }
 
+    public function secondary() {
+        $params = array('email'=> $this->session->userdata('email'));
+        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $this->load->view('member/v_device_list_sc', $data);
+    }
+
     public function add_device() {
         $this->load->view('member/v_add_device');
     }
@@ -177,6 +183,7 @@ class Device extends CI_Controller {
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
+                            'email'=> $this->session->userdata('email'),
                             'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('dvc_password')),
                             'action'        =>  'unlock');
@@ -209,6 +216,12 @@ class Device extends CI_Controller {
             $this->session->set_flashdata('hasil','Update Data Gagal');
         }
         redirect('member/device');
+    }
+
+    public function history() {
+        $params = array('dvc_id'=> $this->uri->segment(4));
+        $data['history'] = json_decode($this->curl->simple_get($this->API.'/accesshistory', $params));
+        $this->load->view('member/v_history', $data);
     }
 }
 ?>
