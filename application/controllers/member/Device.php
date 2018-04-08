@@ -20,7 +20,7 @@ class Device extends CI_Controller {
     }
 
     public function secondary() {
-        $params = array('email'=> $this->session->userdata('email'));
+        $params = array('email'=> $this->session->userdata('email'), 'level'=> 0);
         $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
         $this->load->view('member/v_device_list_sc', $data);
     }
@@ -81,9 +81,25 @@ class Device extends CI_Controller {
         } 
     }
 
+    function remove_sckey() {
+        $dvc_id=$this->uri->segment(4);
+        $data = array(  'dvc_id' => $dvc_id,
+                        'action' => "delete");
+        $delete =  $this->curl->simple_post($this->API.'/sckeyman', $data, array(CURLOPT_BUFFERSIZE => 10));
+        if($delete)
+        {
+            $this->session->set_flashdata('hasil','Update Data Berhasil');
+        }else{
+            $this->session->set_flashdata('hasil','Update Data Gagal');
+        }            
+        redirect('member/device/edit_device/'.$dvc_id);
+    }
+
     public function edit_device() {
         $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
         $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $params = array('dvc_id'=> $this->uri->segment(4));
+        $data['sckey'] = json_decode($this->curl->simple_get($this->API.'/sckeyman', $params));
         $this->load->view('member/v_edit_device', $data);
     }
 
@@ -146,6 +162,90 @@ class Device extends CI_Controller {
                             'part'          =>  'password',
                             'action'        =>  'update');
                     $update =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
+                    if($update){
+                        $this->session->set_flashdata('hasil','Update Data Berhasil');
+                    }else{
+                        $this->session->set_flashdata('hasil','Update Data Gagal');
+                    }
+                    redirect('member/device/edit_device/'.$data['dvc_id']);
+                }else{
+                    $this->session->set_flashdata('peringatan','Password salah');
+                    redirect('member/device/edit_device/'.$data['dvc_id']);
+                }
+            }else{
+                $this->session->set_flashdata('peringatan',"Password Salah!");
+                redirect('member/device/edit_device/'.$data['dvc_id']);
+            }
+        }
+    }
+
+    public function add_sckey() {
+        $params = array('dvc_id'=> $this->uri->segment(4));
+        $sckey = json_decode($this->curl->simple_get($this->API.'/sckeyman', $params));
+        if ($sckey[0]->status!='success') {
+            $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
+            $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+            $this->load->view('member/v_add_sckey', $data);
+        }else{
+            redirect('member/device/edit_device/'.$this->input->post('dvc_id'));
+        }
+    }
+
+    public function process_edit_password_sc() {
+        $this->form_validation->set_rules('old_password', 'Old password', 'trim|required|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password', 'New password', 'trim|required|matches[dvc_password2]|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password2', 'Confirm password', 'trim|required');
+        if ($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('peringatan', validation_errors());
+            redirect('member/device/edit_device/'.$this->input->post('dvc_id'));
+        }else{
+            $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'dvc_password_sc'  =>  md5($this->input->post('old_password')),
+                            'action'        =>  'auth');
+            $respond = json_decode($this->curl->simple_post($this->API.'/sckeyman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            if(isset($respond[0]->status)){
+                if($respond[0]->status=="success"){
+                    $data = array(
+                            'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
+                            'action'        =>  'insert');
+                    $update =  $this->curl->simple_post($this->API.'/sckeyman', $data, array(CURLOPT_BUFFERSIZE => 10));
+                    if($update){
+                        $this->session->set_flashdata('hasil','Update Data Berhasil');
+                    }else{
+                        $this->session->set_flashdata('hasil','Update Data Gagal');
+                    }
+                    redirect('member/device/edit_device/'.$data['dvc_id']);
+                }else{
+                    $this->session->set_flashdata('peringatan','Password salah');
+                    redirect('member/device/edit_device/'.$data['dvc_id']);
+                }
+            }else{
+                $this->session->set_flashdata('peringatan',"Password Salah!");
+                redirect('member/device/edit_device/'.$data['dvc_id']);
+            }
+        }
+    }
+
+    public function process_add_password_sc() {
+        $this->form_validation->set_rules('old_password', 'Old password', 'trim|required|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password', 'New password', 'trim|required|matches[dvc_password2]|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password2', 'Confirm password', 'trim|required');
+        if ($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('peringatan', validation_errors());
+            redirect('member/device/edit_device/'.$this->input->post('dvc_id'));
+        }else{
+            $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'dvc_password'  =>  md5($this->input->post('old_password')),
+                            'action'        =>  'auth');
+            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            if(isset($respond[0]->status)){
+                if($respond[0]->status=="success"){
+                    $data = array(
+                            'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
+                            'action'        =>  'insert');
+                    $update =  $this->curl->simple_post($this->API.'/sckeyman', $data, array(CURLOPT_BUFFERSIZE => 10));
                     if($update){
                         $this->session->set_flashdata('hasil','Update Data Berhasil');
                     }else{

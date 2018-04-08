@@ -51,7 +51,50 @@
 				</form>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<a href="#">Forgot password</a>
+			</td>
+		</tr>
 	</table>
+	<?php
+	if ($sckey[0]->status=='success') {
+	?>
+	<table border="1">
+		<tr>
+			<td>
+				Secondary Access Password
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<?php echo form_open('member/device/process_edit_password_sc');?>
+					<input type="hidden" name="dvc_id" value="<?php echo $device[0]->dvc_id ?>" />
+					<label for="password">Old Password</label>
+					<input type="password" name="old_password"/>
+					<label for="password">New Password</label>
+					<input type="password" name="dvc_password"/>
+					<label for="dvc_password2">Confirm New Password</label>
+					<input type="password" name="dvc_password2"/>
+					<input type="submit" name="change" value="Change"/>
+				</form>
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				<a href="#">Forgot password</a>
+				<br>
+				<a href="<?php echo site_url('member/device/remove_sckey/'.$device[0]->dvc_id);?>">Remove Secondary Key</a>
+			</td>
+		</tr>
+	</table>
+	<?php
+	}else{
+	?>
+	<a href="<?php echo site_url('member/device/add_sckey/'.$device[0]->dvc_id);?>">Add Secondary Password</a>
+	<?php
+	}
+	?>
 	<table  border="1">
 		<tr>
 			<td>
@@ -67,8 +110,7 @@
 				</form>	
 			</td>
 		</tr>
-	</table>
-	<a href="#">Forgot password</a>
+	</table>	
 	<br>
 	<a href="<?php echo site_url('member/device');?>">Device List</a>
 </body>

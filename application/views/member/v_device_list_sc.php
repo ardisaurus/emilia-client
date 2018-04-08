@@ -23,7 +23,7 @@
 			</td>
 		</tr>
 	</table>
-	<h3>Device List</h3>
+	<h3>Device List : Secondary Access</h3>
 	<a href="<?php echo site_url('member/device/add_device');?>">Add device</a>
 	<table border="1">
 		<thead>
@@ -31,7 +31,7 @@
 				<th>Id Device</th>
 				<th>Device Name</th>
 				<th>Status</th>
-				<th colspan="2"></th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -44,7 +44,6 @@
 				<?php }else{ ?>
 					<td bgcolor="red">Closed</td>
 				<?php } ?>
-				<td><a href="<?php echo site_url('member/device/edit_device/'.$devicedata->dvc_id);?>">Edit device</a></td>
 				<td>
 					<?php if ($devicedata->dvc_status!=1) { ?>
 						<a href="<?php echo site_url('member/device/open_device/'.$devicedata->dvc_id);?>">Open</a>
