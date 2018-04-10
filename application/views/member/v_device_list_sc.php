@@ -24,14 +24,14 @@
 		</tr>
 	</table>
 	<h3>Device List : Secondary Access</h3>
-	<a href="<?php echo site_url('member/device/add_device');?>">Add device</a>
+	<a href="<?php echo site_url('member/device/add_device_sc');?>">Add device</a>
 	<table border="1">
 		<thead>
 			<tr>
 				<th>Id Device</th>
 				<th>Device Name</th>
 				<th>Status</th>
-				<th></th>
+				<th colspan="2"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -46,10 +46,13 @@
 				<?php } ?>
 				<td>
 					<?php if ($devicedata->dvc_status!=1) { ?>
-						<a href="<?php echo site_url('member/device/open_device/'.$devicedata->dvc_id);?>">Open</a>
+						<a href="<?php echo site_url('member/device/open_device_sc/'.$devicedata->dvc_id);?>">Open</a>
 					<?php }else{ ?>
 						<a href="<?php echo site_url('member/device/close_device/'.$devicedata->dvc_id);?>">Close</a>
 					<?php } ?>
+				</td>
+				<td>
+					<a href="<?php echo site_url('member/device/process_delete_sc/'.$devicedata->dvc_id);?>">Delete</a>
 				</td>
 			</tr>
 			<?php } ?>
