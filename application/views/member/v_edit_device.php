@@ -53,7 +53,7 @@
 		</tr>
 		<tr>
 			<td>
-				<a href="#">Forgot password</a>
+				<a href="<?php echo site_url('member/device/forgot_password/'.$device[0]->dvc_id);?>">Forgot Password</a>
 			</td>
 		</tr>
 	</table>
@@ -82,8 +82,6 @@
 		</tr>	
 		<tr>
 			<td>
-				<a href="#">Forgot password</a>
-				<br>
 				<a href="<?php echo site_url('member/device/remove_sckey/'.$device[0]->dvc_id);?>">Remove Secondary Key</a>
 			</td>
 		</tr>

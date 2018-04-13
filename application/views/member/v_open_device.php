@@ -27,7 +27,7 @@
 		<input type="password" name="dvc_password"/>
 		<input type="submit" name="open" value="Open"/>
 	</form>
-	<a href="#">Forgot password</a>
+		<a href="<?php echo site_url('member/device/forgot_password/'.$device[0]->dvc_id);?>">Forgot Password</a>
 	<br>
 	<a href="<?php echo site_url('member/device');?>">Device List</a>
 </body>

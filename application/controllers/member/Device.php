@@ -91,6 +91,51 @@ class Device extends CI_Controller {
         $this->load->view('member/v_edit_device', $data);
     }
 
+    // Open Forgot password form : Primary Access
+    public function forgot_password() {
+        $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
+        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $this->load->view('member/v_forgot_password_device', $data);
+    }
+
+    public function process_forgot_password() {
+        $this->form_validation->set_rules('password', 'password', 'trim|required|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password', 'New password', 'trim|required|matches[dvc_password2]|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('dvc_password2', 'Confirm password', 'trim|required');
+        if ($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('peringatan', validation_errors());
+            redirect('member/device/forgot_password/'.$this->input->post('dvc_id'));
+        }else{
+            $data = array(  'email'        =>  $this->session->userdata('email'),
+                            'password'      =>  md5($this->input->post('password')),
+                            'action'        =>  'auth');
+            $respond = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            if(isset($respond[0]->status)){
+                if($respond[0]->status=="success"){
+                    $data = array(
+                            'email'         =>  $this->session->userdata('email'),
+                            'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'password'      =>  md5($this->input->post('password')),
+                            'dvc_password'  =>  md5($this->input->post('dvc_password')),
+                            'action'        =>  'forgot_password');
+                    $update =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
+                    if($update){
+                        $this->session->set_flashdata('hasil','Update Data Berhasil');
+                    }else{
+                        $this->session->set_flashdata('hasil','Update Data Gagal');
+                    }
+                    redirect('member/device/forgot_password/'.$data['dvc_id']);
+                }else{
+                    $this->session->set_flashdata('peringatan','Password salah');
+                    redirect('member/device/forgot_password/'.$data['dvc_id']);
+                }
+            }else{
+                $this->session->set_flashdata('peringatan',"Password Salah!");
+                redirect('member/device/forgot_password/'.$data['dvc_id']);
+            }
+        }
+    }
+
     // Edit name process : Primary Access
     function process_edit_name() {
         $this->form_validation->set_rules('dvc_name', 'Name', 'trim|required|min_length[4]|max_length[50]');
