@@ -58,5 +58,26 @@ Class Login extends CI_Controller{
     function forgotpassword() { 
         $this->load->view('v_forgot_password');
     }
+
+    
+    function forgotpasswordproses() {        
+            $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
+            if ($this->form_validation->run() == FALSE)
+            {
+                $this->load->view('v_forgot_password',$data);
+            }else{
+                $data = array(
+                    'email'     =>  $this->input->post('email'),
+                    'action'       =>  'password');
+                $respond = json_decode($this->curl->simple_post($this->API.'/reset', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                if($respond[0]->status=="success"){
+                    $this->session->set_flashdata('peringatan','Periksa email anda untuk mendapatkan password baru!');
+                	redirect('login');
+                }else{
+                    $this->session->set_flashdata('peringatan','Reset Gagal');
+                	redirect('login/forgotpassword');
+                }
+            }                
+    }
 }
 ?>

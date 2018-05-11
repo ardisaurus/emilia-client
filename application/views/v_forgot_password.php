@@ -6,7 +6,14 @@
 </head>
 <body>
 <h3>Forgot Password</h3>
-	<form action="#" method="post">
+<?php if (validation_errors()) {
+  			echo validation_errors();
+  		} 
+  		if ($this->session->flashdata('peringatan')) { 
+  			echo $this->session->flashdata('peringatan');
+  		}
+  	?>
+  <?php echo form_open('login/forgotpasswordproses', 'class="form-horizontal"');?>
 		<label for="email">Email</label>
 		<input type="email" name="email"/>
 		<input type="submit" name="submit" value="Submit"/>

@@ -55,5 +55,31 @@ class Admin extends CI_Controller {
             }
         } 
     }
+
+    function proses_delete(){                
+        $this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
+        if ($this->form_validation->run() == FALSE){
+            redirect('admin/admin');
+        }else{
+            $params = array('email'=>  $this->input->post('email'));
+            $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            if ($data['user']) {
+                $data = array(
+                    'email'     =>  $this->input->post('email'),
+                    'action'    =>  'delete');
+                    $delete =  $this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10)); 
+                    if($delete)
+                    {
+                        $this->session->set_flashdata('hasil','Delete Data Berhasil');
+                    }else{
+                        $this->session->set_flashdata('hasil','Delete Data Gagal');
+                    }
+                redirect('admin/admin');
+            }else{                
+                $this->session->set_flashdata('peringatan','Email telah digunakan, masukan id lain!');
+                redirect('admin/admin');
+            }
+        } 
+    }
 }
 ?>
