@@ -302,20 +302,37 @@ class Device extends CI_Controller {
 
    // Remove device process : Primary Access
     function process_delete() {
-        if ($this->uri->segment(4)==$this->input->post('dvc_id')) {
-            $data = array(  'dvc_id' => $this->input->post('dvc_id'),
-                            'action' => "delete");
-            $delete =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
-            if($delete)
-            {
-                $this->session->set_flashdata('hasil','Update Data Berhasil');
-            }else{
-                $this->session->set_flashdata('hasil','Update Data Gagal');
-            }
-            redirect('member/device');
+        $dvc_id=$this->input->post('dvc_id');
+        $this->form_validation->set_rules('dvc_id', 'Id Device', 'trim|required');
+        $this->form_validation->set_rules('dvc_password', 'Password', 'trim|required|min_length[8]|max_length[12]');
+        if ($this->form_validation->run() == FALSE){
+            $this->session->set_flashdata('peringatan', validation_errors());    
+            redirect('member/device/edit_device/'.$dvc_id);
         }else{
-            $this->session->set_flashdata('peringatan',"ID Salah!");
-            redirect('member/device/edit_device/'.$this->input->post('dvc_id'));
+            $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
+                            'dvc_password'  =>  md5($this->input->post('dvc_password')),
+                            'action'        =>  'auth');
+            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            if(isset($respond[0]->status)){
+                if($respond[0]->status=="success"){
+                    $data = array(  'dvc_id' => $this->input->post('dvc_id'),
+                                    'action' => "delete");
+                    $delete =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
+                    if($delete)
+                    {
+                        $this->session->set_flashdata('hasil','Update Data Berhasil');
+                    }else{
+                        $this->session->set_flashdata('hasil','Update Data Gagal');
+                    }
+                    redirect('member/device');
+                }else{
+                    $this->session->set_flashdata('peringatan','Kombinasi salah');    
+                    redirect('member/device/edit_device/'.$dvc_id);
+                }
+            }else{
+                $this->session->set_flashdata('peringatan',"Kombinasi Salah!");    
+                redirect('member/device/edit_device/'.$dvc_id);
+            }
         }
     }
 

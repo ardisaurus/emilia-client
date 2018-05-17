@@ -101,9 +101,10 @@
 		</tr>
 		<tr>
 			<td>
-				<?php echo form_open('member/device/process_delete/'.$device[0]->dvc_id);?>
-					<label for="dvc_name">Device ID</label>
-					<input type="text" name="dvc_id"/>
+				<?php echo form_open('member/device/process_delete/');?>
+					<input type="hidden" name="dvc_id" value="<?php echo $device[0]->dvc_id ?>" />
+					<label for="dvc_name">Password</label>
+					<input type="password" name="dvc_password"/>
 					<input type="submit" name="delete" value="delete"/>
 				</form>	
 			</td>
