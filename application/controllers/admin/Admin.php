@@ -14,7 +14,8 @@ class Admin extends CI_Controller {
     }
 
     public function index(){
-        $data['user'] = json_decode($this->curl->simple_get($this->API.'/user'));
+        $respond = json_decode($this->curl->simple_get($this->API.'/user'));
+        $data['user'] = $respond->result;
         $this->load->view('admin/v_admin_list', $data);
     }
 
@@ -32,7 +33,8 @@ class Admin extends CI_Controller {
             $this->load->view('v_signup');
         }else{
             $params = array('email'=>  $this->input->post('email'));
-            $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $respond = json_decode($this->curl->simple_get($this->API.'/user',$params));
+            $data['user'] = $respond->result; 
             if ($data['user']) {
                 $this->session->set_flashdata('peringatan','Email telah digunakan, masukan id lain!');
                 redirect('admin/admin/add_admin');
@@ -62,7 +64,8 @@ class Admin extends CI_Controller {
             redirect('admin/admin');
         }else{
             $params = array('email'=>  $this->input->post('email'));
-            $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $respond = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $data['user'] = $respond->result;
             if ($data['user']) {
                 $data = array(
                     'email'     =>  $this->input->post('email'),

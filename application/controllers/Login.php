@@ -27,11 +27,13 @@ Class Login extends CI_Controller{
                     'email'     =>  $this->input->post('email'),
                     'password'  =>  md5($this->input->post('password')),
                     'action'       =>  'auth');
-                $respond = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $request=json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10)));
+                $respond = $request->result; 
                 if(isset($respond[0]->status)){
                     if($respond[0]->status=="success"){
                         $params = array('email'=>  $this->input->post('email'));
-                        $data = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+                        $respond = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+                        $data = $respond->result;
                         $active=$data[0]->active;
                         if ($active==1) {
                             $this->session->set_userdata('email',$data[0]->email);

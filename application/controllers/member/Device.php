@@ -17,7 +17,8 @@ class Device extends CI_Controller {
     // Primary access device list : Primary Access
     public function index() {
         $params = array('email'=> $this->session->userdata('email'));
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('member/v_device_list', $data);
     }
 
@@ -37,7 +38,8 @@ class Device extends CI_Controller {
             $data = array(
                     'dvc_id'     =>  $this->input->post('dvc_id'),
                     'action'    =>  'id_check');
-                $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $respond = $request->result;
                 if(isset($respond[0]->status))
                 {
                     if($respond[0]->status=="success")
@@ -46,7 +48,8 @@ class Device extends CI_Controller {
                                 'dvc_id'        =>  $this->input->post('dvc_id'),
                                 'dvc_password'  =>  md5($this->input->post('dvc_password')),
                                 'action'        =>  'auth');
-                        $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                        $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                        $respond = $request->result;
                         if(isset($respond[0]->status)){
                             if($respond[0]->status=="success"){
                                 $data = array(
@@ -82,19 +85,20 @@ class Device extends CI_Controller {
     // Open Edit form : Primary Access
     public function edit_device() {
         $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
-
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] =$respond->result;
         $data2 = array(  'dvc_id'        =>  $this->uri->segment(4),
                          'action'        =>  'sc_check');
-        $data['sckey'] = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data2, array(CURLOPT_BUFFERSIZE => 10)));
-
+        $respond =  json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data2, array(CURLOPT_BUFFERSIZE => 10)));
+        $data['sckey'] = $respond->result;
         $this->load->view('member/v_edit_device', $data);
     }
 
     // Open Forgot password form : Primary Access
     public function forgot_password() {
         $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('member/v_forgot_password_device', $data);
     }
 
@@ -109,7 +113,8 @@ class Device extends CI_Controller {
             $data = array(  'email'        =>  $this->session->userdata('email'),
                             'password'      =>  md5($this->input->post('password')),
                             'action'        =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
@@ -171,7 +176,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('old_password')),
                             'action'        =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
@@ -201,10 +207,12 @@ class Device extends CI_Controller {
     public function add_sckey() {
         $data = array(  'dvc_id'        =>  $this->uri->segment(4),
                          'action'        =>  'sc_check');
-        $sckey = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10)));
+        $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10)));
+        $sckey = $respond->result;
         if ($sckey[0]->status!='success') {
             $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
-            $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+            $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+            $data['device'] = $respond->result;
             $this->load->view('member/v_add_sckey', $data);
         }else{
             redirect('member/device/edit_device/'.$this->input->post('dvc_id'));
@@ -223,7 +231,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('old_password')),
                             'action'        =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
@@ -260,7 +269,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password_sc'  =>  md5($this->input->post('old_password')),
                             'action'        =>  'auth_sc');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
@@ -312,7 +322,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('dvc_password')),
                             'action'        =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(  'dvc_id' => $this->input->post('dvc_id'),
@@ -339,7 +350,8 @@ class Device extends CI_Controller {
    // Open unlock device Form : Primary Access
     public function open_device() {
         $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('member/v_open_device', $data);
     }
 
@@ -354,7 +366,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('dvc_password')),
                             'action'        =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(
@@ -383,7 +396,8 @@ class Device extends CI_Controller {
    // Open history list : Primary Access
     public function history() {
         $params = array('dvc_id'=> $this->uri->segment(4));
-        $data['history'] = json_decode($this->curl->simple_get($this->API.'/accesshistory', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/accesshistory', $params));
+        $data['history'] = $respond->result;
         $this->load->view('member/v_history', $data);
     }
 
@@ -408,7 +422,8 @@ class Device extends CI_Controller {
     // Secondary access device list : Secondary Access
     public function secondary() {
         $params = array('email'=> $this->session->userdata('email'), 'level'=> 1);
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('member/v_device_list_sc', $data);
     }
 
@@ -428,7 +443,8 @@ class Device extends CI_Controller {
             $data = array(
                     'dvc_id'     =>  $this->input->post('dvc_id'),
                     'action'    =>  'id_check_sc');
-                $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $respond=$request->result;
                 if(isset($respond[0]->status))
                 {
                     if($respond[0]->status=="success")
@@ -437,7 +453,8 @@ class Device extends CI_Controller {
                                 'dvc_id'        =>  $this->input->post('dvc_id'),
                                 'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
                                 'action'        =>  'auth_sc');
-                        $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                        $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                        $respond=$request->result;
                         if(isset($respond[0]->status)){
                             if($respond[0]->status=="success"){
                                 $data = array(
@@ -489,7 +506,8 @@ class Device extends CI_Controller {
     // Open unlock secondary device form : Secondary Access
     public function open_device_sc() {
         $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4), 'level'=> 1);
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('member/v_open_device_sc', $data);
     }
 
@@ -505,7 +523,8 @@ class Device extends CI_Controller {
             $data = array(  'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
                             'action'        =>  'auth_sc');
-            $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond=$request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(

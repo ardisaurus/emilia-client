@@ -26,7 +26,8 @@ Class Signup extends CI_Controller{
             $this->load->view('v_signup');
         }else{
             $params = array('email'=>  $this->input->post('email'));
-            $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $respond = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $data['user'] = $respond->result; 
             if ($data['user']) {
                 $this->session->set_flashdata('peringatan','Email telah digunakan, masukan id lain!');
                 $this->load->view('v_signup');

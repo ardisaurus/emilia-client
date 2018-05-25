@@ -15,7 +15,8 @@ class Setting extends CI_Controller {
 
 	public function index() {
         $params = array('email'=>  $this->session->userdata('email'));
-        $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/user',$params));
+        $data['user'] = $respond->result;
 		$this->load->view('member/v_setting', $data);
 	}
 
@@ -26,7 +27,8 @@ class Setting extends CI_Controller {
             redirect('member/setting');                     
         }else{
             $params = array('email'=>  $this->input->post('email'));
-            $data['user'] = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
+            $respond = json_decode($this->curl->simple_get($this->API.'/user',$params));
+            $data['user'] =  $respond->result;
             if ($data['user']) {
                 $this->session->set_flashdata('peringatan','Email telah digunakan, masukan id lain!');
                 redirect('member/setting');
@@ -96,7 +98,8 @@ class Setting extends CI_Controller {
                     'email'     =>  $this->session->userdata('email'),
                     'password'  =>  md5($this->input->post('old_password')),
                     'action'    =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/user', $data_auth, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/user', $data_auth, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(  
@@ -130,7 +133,8 @@ class Setting extends CI_Controller {
                     'email'     =>  $this->session->userdata('email'),
                     'password'  =>  md5($this->input->post('password')),
                     'action'    =>  'auth');
-            $respond = json_decode($this->curl->simple_post($this->API.'/user', $data_auth, array(CURLOPT_BUFFERSIZE => 10))); 
+            $request = json_decode($this->curl->simple_post($this->API.'/user', $data_auth, array(CURLOPT_BUFFERSIZE => 10))); 
+            $respond = $request->result;
             if(isset($respond[0]->status)){
                 if($respond[0]->status=="success"){
                     $data = array(  'email' => $this->session->userdata('email'),

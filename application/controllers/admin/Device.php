@@ -14,18 +14,21 @@ class Device extends CI_Controller {
     }
 
     public function index() {
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/admindeviceman'));
+        $respond = json_decode($this->curl->simple_get($this->API.'/admindeviceman'));
+        $data['device'] = $respond->result;
         $this->load->view('admin/v_device_unreg', $data);
     }
 
     public function registered() {
         $params = array('ownership'=> 1);
-        $data['device'] = json_decode($this->curl->simple_get($this->API.'/admindeviceman', $params));
+        $respond = json_decode($this->curl->simple_get($this->API.'/admindeviceman', $params));
+        $data['device'] = $respond->result;
         $this->load->view('admin/v_device_reg', $data);
     }
 
     public function add_device() {
-        $respond = json_decode($this->curl->simple_get($this->API.'/nugen'));
+        $nugen = json_decode($this->curl->simple_get($this->API.'/nugen'));
+        $respond = $nugen->result;
         $data['dvc_id'] = $respond[0]->dvc_id;
         $this->load->view('admin/v_add_device', $data);
     }
@@ -38,7 +41,8 @@ class Device extends CI_Controller {
             redirect('admin/device/add_device');
         }else{
             $params = array('dvc_id'=>  $this->input->post('dvc_id'));
-            $data['dvc'] = json_decode($this->curl->simple_get($this->API.'/admindeviceman',$params)); 
+            $respond = json_decode($this->curl->simple_get($this->API.'/admindeviceman',$params)); 
+            $data['dvc'] = $respond->result;
             if ($data['dvc']) {
                 $this->session->set_flashdata('peringatan','Device Id telah digunakan, masukan id lain!');
                 redirect('admin/device/add_device');
