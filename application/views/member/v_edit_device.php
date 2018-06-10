@@ -58,7 +58,7 @@
 		</tr>
 	</table>
 	<?php
-	if ($sckey[0]->status=='success') {
+	if ($sckey->status=='success') {
 	?>
 	<table border="1">
 		<tr>

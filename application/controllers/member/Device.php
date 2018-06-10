@@ -40,9 +40,9 @@ class Device extends CI_Controller {
                     'action'    =>  'id_check');
                 $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
                 $respond = $request->result;
-                if(isset($respond[0]->status))
+                if(isset($respond->status))
                 {
-                    if($respond[0]->status=="success")
+                    if($respond->status=="success")
                     {
                         $data = array(
                                 'dvc_id'        =>  $this->input->post('dvc_id'),
@@ -50,8 +50,8 @@ class Device extends CI_Controller {
                                 'action'        =>  'auth');
                         $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
                         $respond = $request->result;
-                        if(isset($respond[0]->status)){
-                            if($respond[0]->status=="success"){
+                        if(isset($respond->status)){
+                            if($respond->status=="success"){
                                 $data = array(
                                     'own_dvc_id'    =>  $this->input->post('dvc_id'),
                                     'own_email'     =>  $this->session->userdata('email'),
@@ -115,8 +115,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'email'         =>  $this->session->userdata('email'),
                             'dvc_id'        =>  $this->input->post('dvc_id'),
@@ -178,8 +178,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password'  =>  md5($this->input->post('dvc_password')),
@@ -209,7 +209,7 @@ class Device extends CI_Controller {
                          'action'        =>  'sc_check');
         $respond = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10)));
         $sckey = $respond->result;
-        if ($sckey[0]->status!='success') {
+        if ($sckey->status!='success') {
             $params = array('email'=> $this->session->userdata('email'), 'dvc_id'=> $this->uri->segment(4));
             $respond = json_decode($this->curl->simple_get($this->API.'/memberdeviceman', $params));
             $data['device'] = $respond->result;
@@ -233,8 +233,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
@@ -271,8 +271,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth_sc');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'dvc_id'        =>  $this->input->post('dvc_id'),
                             'dvc_password_sc'  =>  md5($this->input->post('dvc_password')),
@@ -324,8 +324,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(  'dvc_id' => $this->input->post('dvc_id'),
                                     'action' => "delete");
                     $delete =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
@@ -368,8 +368,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'email'=> $this->session->userdata('email'),
                             'dvc_id'        =>  $this->input->post('dvc_id'),
@@ -445,9 +445,9 @@ class Device extends CI_Controller {
                     'action'    =>  'id_check_sc');
                 $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
                 $respond=$request->result;
-                if(isset($respond[0]->status))
+                if(isset($respond->status))
                 {
-                    if($respond[0]->status=="success")
+                    if($respond->status=="success")
                     {
                         $data = array(
                                 'dvc_id'        =>  $this->input->post('dvc_id'),
@@ -455,8 +455,8 @@ class Device extends CI_Controller {
                                 'action'        =>  'auth_sc');
                         $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
                         $respond=$request->result;
-                        if(isset($respond[0]->status)){
-                            if($respond[0]->status=="success"){
+                        if(isset($respond->status)){
+                            if($respond->status=="success"){
                                 $data = array(
                                     'own_dvc_id'    =>  $this->input->post('dvc_id'),
                                     'own_email'     =>  $this->session->userdata('email'),
@@ -525,8 +525,8 @@ class Device extends CI_Controller {
                             'action'        =>  'auth_sc');
             $request = json_decode($this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond=$request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(
                             'email'=> $this->session->userdata('email'),
                             'dvc_id'        =>  $this->input->post('dvc_id'),

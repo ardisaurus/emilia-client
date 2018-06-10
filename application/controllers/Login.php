@@ -29,8 +29,8 @@ Class Login extends CI_Controller{
                     'action'       =>  'auth');
                 $request=json_decode($this->curl->simple_post($this->API.'/user', $data, array(CURLOPT_BUFFERSIZE => 10)));
                 $respond = $request->result; 
-                if(isset($respond[0]->status)){
-                    if($respond[0]->status=="success"){
+                if(isset($respond->status)){
+                    if($respond->status=="success"){
                         $params = array('email'=>  $this->input->post('email'));
                         $respond = json_decode($this->curl->simple_get($this->API.'/user',$params)); 
                         $data = $respond->result;
@@ -71,8 +71,9 @@ Class Login extends CI_Controller{
                 $data = array(
                     'email'     =>  $this->input->post('email'),
                     'action'       =>  'password');
-                $respond = json_decode($this->curl->simple_post($this->API.'/reset', $data, array(CURLOPT_BUFFERSIZE => 10))); 
-                if($respond[0]->status=="success"){
+                $request = json_decode($this->curl->simple_post($this->API.'/reset', $data, array(CURLOPT_BUFFERSIZE => 10))); 
+                $respond = $request->result;
+                if($respond->status=="success"){
                     $this->session->set_flashdata('peringatan','Periksa email anda untuk mendapatkan password baru!');
                 	redirect('login');
                 }else{
