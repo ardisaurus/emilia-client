@@ -28,7 +28,7 @@ class Device extends CI_Controller {
 
     public function add_device() {
         $nugen = json_decode($this->curl->simple_get($this->API.'/nugen'));
-        $respond = $nugen->result;
+        $respond = $nugen->result[0];
         $data['dvc_id'] = $respond->dvc_id;
         $this->load->view('admin/v_add_device', $data);
     }
