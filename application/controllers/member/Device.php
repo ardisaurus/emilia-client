@@ -406,8 +406,9 @@ class Device extends CI_Controller {
     // Close device : Both Access
     public function close_device() {
         $data = array(
-                        'dvc_id'        =>  $this->uri->segment(4),
-                        'action'        =>  'unlock');
+                        'dvc_id'    =>  $this->uri->segment(4),
+                        'email'     => $this->session->userdata('email'),
+                        'action'    =>  'lock');
         $update =  $this->curl->simple_post($this->API.'/memberdeviceman', $data, array(CURLOPT_BUFFERSIZE => 10));
         if($update){
             $this->session->set_flashdata('hasil','Update Data Berhasil');

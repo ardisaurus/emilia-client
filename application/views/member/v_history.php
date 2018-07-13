@@ -32,6 +32,7 @@
 				<th>Time</th>
 				<th>Email</th>
 				<th>Name</th>
+				<th>Status</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,6 +42,7 @@
 				<td><?php echo $devicedata->hst_time; ?></td>
 				<td><?php echo $devicedata->hst_email; ?></td>
 				<td><?php echo $devicedata->hst_user_name; ?></td>
+				<td><?php echo $devicedata->hst_status; ?></td>
 			</tr>
 			<?php } ?>
 		</tbody>
