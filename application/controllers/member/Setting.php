@@ -87,8 +87,8 @@ class Setting extends CI_Controller {
     }
 
     function edit_password() {
-        $this->form_validation->set_rules('old_password', 'Password', 'trim|required|min_length[8]|max_length[12]');
-        $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password2]|min_length[8]|max_length[12]');
+        $this->form_validation->set_rules('old_password', 'Password', 'trim|required|min_length[8]|max_length[16]');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required|matches[password2]|min_length[8]|max_length[16]');
         $this->form_validation->set_rules('password2', 'Konfirmasi Password', 'trim|required');
         if ($this->form_validation->run() == FALSE){
             $this->session->set_flashdata('peringatan', validation_errors());
@@ -100,8 +100,8 @@ class Setting extends CI_Controller {
                     'action'    =>  'auth');
             $request = json_decode($this->curl->simple_post($this->API.'/user', $data_auth, array(CURLOPT_BUFFERSIZE => 10))); 
             $respond = $request->result;
-            if(isset($respond[0]->status)){
-                if($respond[0]->status=="success"){
+            if(isset($respond->status)){
+                if($respond->status=="success"){
                     $data = array(  
                                 'email' => $this->session->userdata('email'), 
                                 'password' => md5($this->input->post('password')),
